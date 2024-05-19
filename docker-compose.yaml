@@ -1,0 +1,49 @@
+services:
+  mysql:
+    image: mysql:8.0.33
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+      - mydonations-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DATASOURCE_JTA: ${DATASOURCE_JTA}
+      DATASOURCE_URL: ${DATASOURCE_URL}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_FROM: ${MAIL_FROM}
+      FRONTEND_URL: ${FRONTEND_URL}
+      BACKUPS_PATH: ${BACKUPS_PATH}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./storage/backups:/opt/mydonations/backups
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+
+volumes:
+  mydonations-data:

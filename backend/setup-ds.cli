@@ -1,0 +1,20 @@
+embed-server --server-config=standalone.xml --std-out=echo
+batch
+
+module add --name=com.mysql --resources=/opt/jboss/wildfly/modules/system/layers/base/com/mysql/jdbc/main/mysql-connector-java.jar --dependencies=javax.api,javax.transaction.api
+
+/subsystem=datasources/jdbc-driver=mysql:add(driver-name="mysql",driver-module-name="com.mysql",driver-class-name="com.mysql.cj.jdbc.Driver")
+
+/subsystem=datasources/data-source=MyDonationsDS:add(
+    jndi-name=java:jboss/datasources/MyDonationsDS,
+    driver-name=mysql,
+    connection-url=jdbc:mysql://mysql:3306/mydonations?useSSL=false,
+    user-name=your_db_username,
+    password=your_db_password,
+    enabled=true,
+    use-java-context=true,
+    valid-connection-checker-class-name=org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker,
+    exception-sorter-class-name=org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLExceptionSorter)
+
+run-batch
+stop-embedded-server

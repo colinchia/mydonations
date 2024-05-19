@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.mydonations: backend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.mydonations: backend
+    spec:
+      containers:
+        - name: backend
+          image: <your-dockerhub-username>/mydonations-backend:v01
+          env:
+            - name: BACKUPS_PATH
+              value: /opt/mydonations/backups
+            - name: DATASOURCE_JTA
+              value: java:jboss/datasources/MyDonationsDS
+            - name: DATASOURCE_URL
+              value: jdbc:mysql://mysql:3306/mydonations
+            - name: FRONTEND_URL
+              value: http://localhost:3000
+            - name: MAIL_HOST
+              value: smtp.gmail.com
+            - name: MAIL_PORT
+              value: "587"
+            - name: MAIL_FROM
+              value: your_email@gmail.com
+            - name: MAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: MAIL_USERNAME
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: MAIL_PASSWORD
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: MYSQL_PASSWORD
+            - name: STRIPE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: STRIPE_SECRET_KEY
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: backups-volume
+              mountPath: /opt/mydonations/backups
+      restartPolicy: Always
+      volumes:
+        - name: backups-volume
+          persistentVolumeClaim:
+            claimName: backups-pvc

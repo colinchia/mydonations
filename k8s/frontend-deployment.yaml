@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.mydonations: frontend
+  template:
+    metadata:
+      labels:
+        app.mydonations: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: <your-dockerhub-username>/mydonations-frontend:v01
+          env:
+            - name: REACT_APP_API_BASE_URL
+              value: http://localhost:8080
+            - name: REACT_APP_CLIENT_BASE_URL
+              value: http://localhost:3000
+            - name: REACT_APP_KEY_EXCHANGERATEAPI
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: REACT_APP_KEY_EXCHANGERATEAPI
+            - name: REACT_APP_KEYPUBLIC_STRIPE
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: REACT_APP_KEYPUBLIC_STRIPE
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+      restartPolicy: Always

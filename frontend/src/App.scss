@@ -1,0 +1,184 @@
+/* Base Styles */
+html, 
+body {
+    background-color: #1f1f1f;
+    color: white;
+    font-weight: 200;
+}
+
+header {
+    position: relative;
+}
+
+footer {
+    font-size: 13px;
+    margin-top: 50px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+
+/* Vendor Override Styles: Bootstrap */
+.carousel-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-item {
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100px; /* Control bottom fade effect area */
+        background: linear-gradient(to bottom, transparent, #1f1f1f);
+        pointer-events: none;
+    }
+}
+
+.carousel-item img {
+    max-height: 500px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.progress {
+    border-radius: 0;
+}
+
+.progress-bar {
+    background-color: #2e8b57;
+}
+
+
+/* MyDonations Custom Styles: Global Components */
+.mydon-img {
+    border-radius: 5px;
+}
+
+.mydon-ul {
+    list-style-position: outside;
+    padding-left: 0;
+    margin-left: 18px;
+}
+
+.mydon-btn-darkseagreen {
+    background-color: darkseagreen;
+    color: white;
+    border: none;
+    font-weight: 600;
+
+    &:hover {
+        background-color: #3cb371;
+        color: #ffffff;
+    }
+
+    &:active {
+        background-color: #2e8b57 !important;
+        color: #ffffff !important;
+    }
+
+    &:disabled {
+        background-color: #2e8b57 !important;
+        color: #ffffff !important;
+    }
+}
+
+
+/* MyDonations Styles: Component-Specific */
+.mydon-cardelement {
+    height: 2.4em;
+    padding-top: .7em;
+}
+
+.mydon-content-wrap {
+    position: relative;
+    min-height: 100vh;
+}
+
+.mydon-currencylist {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.mydon-dropdown-toggle {
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    color: #495057;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+
+    &:hover {
+        background-color: #6c757d;
+        color: #ffffff;
+    }
+
+    &:focus {
+        background-color: #6c757d;
+        color: #ffffff;
+    }
+
+    &:active {
+        background-color: #565e64 !important;
+        color: #ffffff;
+    }
+}
+
+.mydon-header-caption {
+    text-align: center;
+    width: 75%;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+.mydon-header-captionlogo {
+    margin-top: 50px;
+    margin-bottom: 30px;
+    width: 10%;
+
+    @media (max-width: 767px) {
+        margin-top: 40px;
+        margin-bottom: 20px;
+        width: 15%;
+    }
+
+    @media (max-width: 576px) {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        width: 15%;
+    }
+}
+
+.mydon-header-captiontext {
+    color: white;
+    text-shadow: 0 0 5px #000000, 0 0 10px #000000;
+    font-family: "M PLUS Rounded 1c", sans-serif !important;
+    font-size: 55px;
+    font-weight: normal;
+    
+    @media (max-width: 767px) {
+        font-size: 30px;
+    }
+
+    @media (max-width: 576px) {
+        font-size: 20px;
+    }
+
+    @media (max-width: 350px) {
+        font-size: 10px;
+    }
+}
+
+.mydon-payment-header {
+    background-color: darkseagreen;
+    border-bottom: 0;
+    color: white;
+    font-size: x-large;
+    font-weight: 300;
+}
